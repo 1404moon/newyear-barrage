@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跨年弹幕堆叠 | 2026新年快乐</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 页面背景：深色星空感，贴合跨年氛围 */
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a061f, #1a103f, #0f0829);
+            overflow: hidden;
+            position: relative;
+            font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+        }
+
+        /* 弹幕基础样式：圆角、爱心、阴影、半透明 */
+        .barrage {
+            position: absolute;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.4;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            opacity: 0.9;
+            z-index: 10;
+            /* 核心：随机旋转角度，模拟堆叠倾斜感 */
+            transform: rotate(calc(var(--rotate) * 1deg));
+            transition: all 0.3s ease;
+        }
+
+        /* 爱心装饰：伪元素实现 */
+        .barrage::before {
+            content: "❤️";
+            margin-right: 6px;
+            font-size: 12px;
+        }
+
+        /* 不同色系弹幕（模拟图片中彩色效果） */
+        .barrage.pink {
+            background: linear-gradient(90deg, #ffd1dc, #ffc2d1);
+            border: 1px solid #ff99bb;
+        }
+        .barrage.blue {
+            background: linear-gradient(90deg, #cce5ff, #b8daff);
+            border: 1px solid #91c9ff;
+        }
+        .barrage.white {
+            background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+            border: 1px solid #dee2e6;
+        }
+        .barrage.yellow {
+            background: linear-gradient(90deg, #fff3cd, #ffeaa7);
+            border: 1px solid #ffdd70;
+        }
+        .barrage.purple {
+            background: linear-gradient(90deg, #e8e5ff, #d9d2ff);
+            border: 1px solid #c0b4ff;
+        }
+
+        /* 悬浮效果：轻微放大+提亮 */
+        .barrage:hover {
+            transform: rotate(calc(var(--rotate) * 1deg)) scale(1.05);
+            opacity: 1;
+            z-index: 20;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+        }
+
+        /* 新年标题：居中展示，增加氛围感 */
+        .year-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 0 0 20px #ff6b81, 0 0 40px #ff8fa3;
+            opacity: 0.15;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* 响应式适配：移动端缩小字体和间距 */
+        @media (max-width: 768px) {
+            .barrage {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            .barrage::before {
+                font-size: 10px;
+            }
+            .year-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 新年背景标题 -->
+    <h1 class="year-title">2026</h1>
+
+    <script>
+        // 1. 跨年文案库（还原图片中的核心文案）
+        const barrageTexts = [
+            "奔赴下一场山海",
+            "更更更更更好",
+            "所有美好也如期而至",
+            "2026 零点的烟火下开启下一个四季",
+            "你好2026",
+            "所有美好如期而至·所爱",
+            "和所有的不开心说再见，迎接新一年！",
+            "零点的烟火下开启下一个四季",
+            "祝我们，好在新的一年❤️",
+            "2026年好运正在派送",
+            "新年和你一起跨年",
+            "Happy New Year 新年快乐",
+            "愿新岁，常欢愉，皆胜意",
+            "所求皆如愿，所行皆坦途",
+            "新的365天也要充满热爱",
+            "跨年快乐，万事顺意",
+            "2026，要闪闪发光呀",
+            "把烦恼清零，把快乐加满"
+        ];
+
+        // 2. 弹幕颜色类型
+        const barrageColors = ["pink", "blue", "white", "yellow", "purple"];
+
+        // 3. 创建单个弹幕元素
+        function createBarrage() {
+            // 随机选文案和颜色
+            const text = barrageTexts[Math.floor(Math.random() * barrageTexts.length)];
+            const color = barrageColors[Math.floor(Math.random() * barrageColors.length)];
+            
+            // 创建DOM元素
+            const barrage = document.createElement("div");
+            barrage.className = `barrage ${color}`;
+            barrage.textContent = text;
+            
+            // 随机属性：位置、旋转角度、大小
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            // 位置：避开边缘，保证完整显示
+            const left = Math.random() * (windowWidth - 200) + 50;
+            const top = Math.random() * (windowHeight - 100) + 20;
+            // 旋转角度：-5° 到 5° 之间，模拟堆叠倾斜
+            const rotate = Math.random() * 10 - 5;
+
+            // 设置样式变量和属性
+            barrage.style.setProperty("--rotate", rotate);
+            barrage.style.left = `${left}px`;
+            barrage.style.top = `${top}px`;
+
+            // 添加到页面
+            document.body.appendChild(barrage);
+
+            // 可选：弹幕缓慢漂浮动画（增加动态感）
+            setTimeout(() => {
+                barrage.style.transition = "all 15s linear";
+                barrage.style.left = `${left + (Math.random() * 100 - 50)}px`;
+                barrage.style.top = `${top + (Math.random() * 80 - 40)}px`;
+            }, 100);
+        }
+
+        // 4. 批量创建弹幕（数量可自定义，建议30-50个，模拟堆叠效果）
+        function createBarrages(count = 40) {
+            for (let i = 0; i < count; i++) {
+                // 分批创建，避免卡顿
+                setTimeout(() => createBarrage(), i * 100);
+            }
+        }
+
+        // 5. 初始化：创建弹幕，窗口大小变化时重新生成
+        createBarrages();
+        window.addEventListener("resize", () => {
+            // 清空原有弹幕，重新生成适配新尺寸
+            document.querySelectorAll(".barrage").forEach(el => el.remove());
+            createBarrages();
+        });
+    </script>
+</body>
+</html>
